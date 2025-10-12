@@ -1,0 +1,54 @@
+.form-group {
+  width: 100%;
+
+  &_input,
+  .file-upload {
+    width: 100%;
+    min-height: 3rem;
+    border-radius: $radius-sm;
+    border: $border-1 solid $white;
+    background-color: rgba(255, 255, 255, 0.85);
+    display: flex;
+    padding: $space-xs;
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: #272733;
+
+    &:focus {
+      background-color: $white;
+    }
+  }
+
+  .file-upload {
+    @include centering;
+    border: $border-2 solid $blue;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background-color: $white;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      line-height: 100%;
+      text-transform: uppercase;
+      color: $steel-gray;
+      cursor: pointer;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .icon {
+      margin-right: $space-xs;
+    }
+  }
+  .file-name {
+    color: $white;
+    display: inline-flex;
+    margin-top: $space-xxs;
+  }
+}

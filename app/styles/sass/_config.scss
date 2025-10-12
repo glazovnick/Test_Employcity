@@ -1,0 +1,58 @@
+// USER VARIABLES SECTION
+
+$figma-mobile: 575.98px;
+$figma-tablet: 767.98px;
+$figma-large: 1199.98px;
+
+$accent: orange; // Accent Color
+
+$white: #ffffff;
+$grey: #bbbbbb;
+$dark-grey: #3d4050;
+$deep-grey: #2a2b30;
+$steel-gray: #272733;
+$blue: #3e9cdc;
+$deep-blue: #286690;
+$dark-blue: #10101d;
+$purple: #6f6d7b;
+$silver-ash: #c3c3c3;
+
+$border-color: $blue;
+$textcolor: #000;
+
+$fontfamily: "Lato", sans-serif;
+$fontfamily-secondary: "Raleway", sans-serif;
+$lineheight: 100%;
+$fontsize: 1rem;
+
+$root-font-size: 16px;
+$container-max: 77.25rem;
+$space-xxs: 0.375rem;
+$space-xs: 0.625rem;
+$space-sm: 0.9375rem;
+$space-1: 1rem;
+$space-lg: 1.25rem;
+$space-xl: 2rem;
+$space-md: 1.875rem;
+
+$radius-sm: 0.125rem;
+$radius-md: 0.25rem;
+$radius-lg: 0.3125rem;
+
+$border-1: 0.0625rem;
+$border-2: 0.125rem;
+$border-3: 0.1875rem;
+$border-5: 0.3125rem;
+
+$outline-offset: 0.125rem;
+
+@mixin centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin centering-vertical {
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,72 @@
+$footer-font-size: 0.875rem !default;
+$footer-padding: $space-xl !default;
+$footer-gap: $space-xs !default;
+$footer-column-gap: 2.375rem !default;
+
+.footer {
+  background: $dark-grey;
+
+  font-size: $footer-font-size;
+  color: $white;
+  padding: $footer-padding 0;
+
+  &_inner {
+    @include centering-vertical;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: $footer-gap;
+  }
+
+  &_left {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: $white;
+
+    > span {
+      text-transform: uppercase;
+    }
+  }
+
+  &_items {
+    display: flex;
+    column-gap: $footer-column-gap;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &_item,
+  &_link {
+    @include centering-vertical;
+    gap: $space-xxs;
+    white-space: nowrap;
+  }
+
+  &_item {
+    color: $silver-ash;
+  }
+
+  &_link {
+    color: $white;
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+
+  &_link:hover {
+    color: #4da3ff;
+  }
+
+  .divider {
+    color: $silver-ash;
+  }
+
+  @media (max-width: $figma-large) {
+    &_inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .divider {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,121 @@
+$header-padding-block: 2.625rem !default;
+$header-logo-size: 1.75rem !default;
+$header-gap: clamp($space-xs, 4vw, 3.75rem) !default;
+$burger-line-h: $border-2 !default;
+
+.header {
+  background-color: rgba(16, 16, 29, 0.9);
+  padding-block: $header-padding-block;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 3;
+
+  &_inner {
+    @include centering-vertical;
+  }
+
+  &_logo {
+    font-family: $fontfamily-secondary;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    text-transform: uppercase;
+    font-size: $header-logo-size;
+    color: $white;
+    margin-inline-end: auto;
+    text-decoration: none;
+    cursor: pointer;
+
+    > span {
+      color: $blue;
+    }
+  }
+
+  &_menu {
+    display: flex;
+    gap: $header-gap;
+
+    > a {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      color: $white;
+      text-decoration: none;
+
+      &.active {
+        color: $blue;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .burger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 1.625rem;
+    height: 1.125rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    &-line {
+      width: 100%;
+      height: 2px;
+      background: $white;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    &.active {
+      .burger-line:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+      .burger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .burger-line:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+  }
+
+  @media (max-width: $figma-tablet) {
+    &_menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: $dark-blue;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease;
+      border-top: 1px solid rgba($white, 0.1);
+
+      &.open {
+        max-height: 100vh;
+      }
+
+      > a {
+        display: block;
+        padding: 16px 0;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba($white, 0.05);
+      }
+    }
+
+    .burger {
+      display: flex;
+      margin-left: auto;
+    }
+  }
+}

@@ -1,0 +1,91 @@
+$btn-min-width: 11.4375rem !default;
+$btn-padding: $space-sm !default;
+$btn-radius: $radius-md !default;
+$btn-transition: 0.25s ease !default;
+$btn-font-size: 0.8125rem !default;
+$btn-font-weight: 400 !default;
+
+.btn {
+  min-width: clamp(7.5rem, 40vw, #{$btn-min-width});
+  padding: $btn-padding;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $btn-radius;
+  background-color: $white;
+  font-weight: $btn-font-weight;
+  font-size: $btn-font-size;
+  color: $textcolor;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1;
+  border: none;
+  transition: $btn-transition;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 0.1875rem rgba($blue, 0.18);
+    border-radius: $btn-radius;
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  @media (max-width: 30rem) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  &:focus {
+    outline-offset: $outline-offset;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btn-primary {
+  background-color: $blue;
+  color: $white;
+  border: $border-1 solid $white;
+
+  &:hover,
+  &:focus {
+    background-color: $deep-blue;
+  }
+
+  &:active {
+    background-color: $deep-blue;
+  }
+
+  &[type="submit"] {
+    width: 100%;
+    padding-block: 1rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+}
+
+.btn-secondary {
+  color: $deep-grey;
+  border: $border-1 solid $purple;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  &:active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}

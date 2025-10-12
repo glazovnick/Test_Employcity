@@ -1,0 +1,57 @@
+.progress {
+  width: 100%;
+
+  &__labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  &__label-text {
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: $white;
+  }
+
+  &__label-percent {
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-left: $space-1;
+  }
+
+  &__bar {
+    position: relative;
+    height: 0.375rem;
+    border-radius: $radius-sm;
+    background: rgba(255, 255, 255, 0.7);
+    border: $border-1 solid white;
+    cursor: pointer;
+  }
+
+  &__fill {
+    position: absolute;
+    height: 100%;
+    border-radius: $radius-sm;
+    background: #4aa3ff;
+    width: 0%;
+  }
+
+  &__thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    background: $blue;
+    border-radius: 50%;
+    border: $border-3 solid $deep-blue;
+    cursor: grab;
+  }
+
+  &__thumb:active {
+    cursor: grabbing;
+  }
+}

@@ -1,0 +1,144 @@
+$order-padding-top: clamp($space-xl, 2.3415rem + 7.0423vw, 8.125rem) !default;
+$order-padding-bottom: clamp($space-xl, 1.5904rem + 10.7981vw, 9.5rem) !default;
+$order-heading-margin-bottom: 2.875rem !default;
+$order-steps-gap: $space-md !default;
+$order-step-size: 6.25rem !default;
+$order-step-offset-top: 3rem !default;
+
+.order {
+  background-image: url(/images/src/order-bg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: #272733;
+  padding-top: clamp($space-xl, 2.3415rem + 7.0423vw, 8.125rem);
+  padding-bottom: clamp($space-xl, 1.5904rem + 10.7981vw, 9.5rem);
+  text-align: center;
+
+  &__heading {
+    font-weight: 800;
+    font-size: clamp(1.125rem, 0.7025rem + 2.1127vw, 2.25rem);
+    color: $white;
+    text-transform: uppercase;
+    margin-bottom: $order-heading-margin-bottom;
+
+    > span {
+      color: $blue;
+    }
+  }
+
+  &__subtitle {
+    font-weight: 400;
+    font-size: 1.125rem;
+    color: $grey;
+  }
+
+  .form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $order-steps-gap;
+
+    @media (max-width: $figma-tablet) {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      &:nth-child(4) {
+        grid-column: 1 / 3;
+      }
+
+      &:last-child {
+        grid-column: 2;
+      }
+
+      @media (max-width: $figma-tablet) {
+        grid-template-columns: 1fr;
+
+        & {
+          grid-column: 1 / -1 !important;
+        }
+      }
+    }
+  }
+
+  .btn.btn-primary[type="submit"] {
+    @media (min-width: $figma-tablet) {
+      margin-top: $space-xxs;
+    }
+  }
+}
+
+.steps {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  position: relative;
+  margin-top: 5.25rem;
+  margin-bottom: 5.875rem;
+
+  .step {
+    max-width: 13.0625rem;
+    width: 100%;
+    @include centering;
+    flex-direction: column;
+    padding-inline: $space-xs;
+    text-align: center;
+    position: relative;
+    flex: 1 1 8.125rem;
+
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: $order-step-offset-top;
+      right: -50%;
+      width: 100%;
+      height: 0.375rem;
+      background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.7) 20%,
+        transparent 20%
+      );
+      background-size: 1.625rem 0.375rem;
+      background-repeat: repeat-x;
+      z-index: 0;
+    }
+
+    &_base {
+      width: $order-step-size;
+      height: $order-step-size;
+      border-radius: 50%;
+      background-color: $blue;
+      border: $border-5 solid $deep-blue;
+      @include centering;
+      position: relative;
+      z-index: 2;
+    }
+
+    &_svg {
+      width: 3.4375rem;
+      height: 3.4375rem;
+      fill: $white;
+    }
+
+    &_text {
+      color: $white;
+      font-weight: 400;
+      font-size: 1rem;
+      margin-top: 1.25rem;
+      word-break: break-word;
+    }
+  }
+}
+
+@media (max-width: $figma-tablet) {
+  .steps {
+    flex-direction: column;
+    align-items: center;
+    gap: $space-md;
+  }
+
+  .step:not(:last-child)::after {
+    display: none;
+  }
+}
