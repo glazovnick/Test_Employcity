@@ -4,6 +4,7 @@ $order-heading-margin-bottom: 2.875rem !default;
 $order-steps-gap: $space-md !default;
 $order-step-size: 6.25rem !default;
 $order-step-offset-top: 3rem !default;
+$order-pulse-delay-step: 0.4s !default;
 
 .order {
   background-image: url(/images/src/order-bg.png);
@@ -11,8 +12,8 @@ $order-step-offset-top: 3rem !default;
   background-size: cover;
   background-position: center;
   background-color: #272733;
-  padding-top: clamp($space-xl, 2.3415rem + 7.0423vw, 8.125rem);
-  padding-bottom: clamp($space-xl, 1.5904rem + 10.7981vw, 9.5rem);
+  padding-top: $order-padding-top;
+  padding-bottom: $order-padding-bottom;
   text-align: center;
 
   &__heading {
@@ -86,6 +87,25 @@ $order-step-offset-top: 3rem !default;
     text-align: center;
     position: relative;
     flex: 1 1 8.125rem;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: appear 0.6s ease-out forwards;
+
+    &:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+    &:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+    &:nth-child(5) {
+      animation-delay: 1s;
+    }
 
     &:not(:last-child)::after {
       content: "";
@@ -96,12 +116,28 @@ $order-step-offset-top: 3rem !default;
       height: 0.375rem;
       background-image: radial-gradient(
         circle,
-        rgba(255, 255, 255, 0.7) 20%,
-        transparent 20%
+        rgba(255, 255, 255, 0.35) 25%,
+        transparent 30%
       );
       background-size: 1.625rem 0.375rem;
       background-repeat: repeat-x;
       z-index: 0;
+      animation: linePulse 2.5s ease-in-out infinite;
+      opacity: 0.4;
+      will-change: opacity, filter;
+    }
+
+    &:nth-child(1)::after {
+      animation-delay: $order-pulse-delay-step * 0.5;
+    }
+    &:nth-child(2)::after {
+      animation-delay: $order-pulse-delay-step * 1.5;
+    }
+    &:nth-child(3)::after {
+      animation-delay: $order-pulse-delay-step * 2.5;
+    }
+    &:nth-child(4)::after {
+      animation-delay: $order-pulse-delay-step * 3.5;
     }
 
     &_base {
@@ -113,6 +149,25 @@ $order-step-offset-top: 3rem !default;
       @include centering;
       position: relative;
       z-index: 2;
+      animation: pulse 2.5s ease-in-out infinite;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform, box-shadow;
+    }
+
+    &:nth-child(1) .step_base {
+      animation-delay: 0s;
+    }
+    &:nth-child(2) .step_base {
+      animation-delay: $order-pulse-delay-step;
+    }
+    &:nth-child(3) .step_base {
+      animation-delay: $order-pulse-delay-step * 2;
+    }
+    &:nth-child(4) .step_base {
+      animation-delay: $order-pulse-delay-step * 3;
+    }
+    &:nth-child(5) .step_base {
+      animation-delay: $order-pulse-delay-step * 4;
     }
 
     &_svg {
@@ -131,11 +186,44 @@ $order-step-offset-top: 3rem !default;
   }
 }
 
+@keyframes appear {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba($blue, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px 5px rgba($blue, 0.25);
+  }
+}
+
+@keyframes linePulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: brightness(100%);
+  }
+  50% {
+    opacity: 1;
+    filter: brightness(160%);
+  }
+}
+
 @media (max-width: $figma-tablet) {
   .steps {
     flex-direction: column;
     align-items: center;
     gap: $space-md;
+    margin-top: $space-lg;
+    margin-bottom: $space-lg;
   }
 
   .step:not(:last-child)::after {
