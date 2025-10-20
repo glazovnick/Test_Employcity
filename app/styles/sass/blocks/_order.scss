@@ -224,18 +224,13 @@ $order-pulse-delay-step: 0.4s !default;
     gap: $space-md;
     margin-top: $space-xxl;
     margin-bottom: $space-xxl;
+
+    .step_base {
+      animation-play-state: paused;
+    }
   }
 
   .step:not(:last-child)::after {
     display: none;
-  }
-}
-
-/* 🔇 Отключаем анимации, если пользователь включил "уменьшение движения" */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    transition: none !important;
   }
 }
