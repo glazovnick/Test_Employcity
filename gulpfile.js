@@ -1,5 +1,5 @@
-let preprocessor = "sass", // Preprocessor (sass, less, styl); 'sass' also work with the Scss syntax in blocks/ folder.
-  fileswatch = "html,htm,txt,json,md,woff2"; // List of files extensions for watching & hard reload
+let preprocessor = "sass", // 'sass', 'less', or 'styl'
+  fileswatch = "html,htm,txt,json,md,woff2";
 
 import pkg from "gulp";
 const { src, dest, parallel, series, watch } = pkg;
@@ -31,21 +31,25 @@ import concat from "gulp-concat";
 import rsync from "gulp-rsync";
 import { deleteAsync } from "del";
 
+const appDir = "app";
+const distDir = "dist";
+
+/* ------------------ BrowserSync ------------------ */
 function browsersync() {
   browserSync.init({
     server: {
-      baseDir: "app/",
-      middleware: bssi({ baseDir: "app/", ext: ".html" }),
+      baseDir: `${appDir}/`,
+      middleware: bssi({ baseDir: `${appDir}/`, ext: ".html" }),
     },
     ghostMode: { clicks: false },
     notify: false,
     online: true,
-    // tunnel: 'yousutename', // Attempt to use the URL https://yousutename.loca.lt
   });
 }
 
+/* ------------------ Scripts ------------------ */
 function scripts() {
-  return src(["app/js/*.js", "!app/js/*.min.js"])
+  return src([`${appDir}/js/*.js`, `!${appDir}/js/*.min.js`])
     .pipe(
       webpackStream(
         {
@@ -56,7 +60,7 @@ function scripts() {
               $: "jquery",
               jQuery: "jquery",
               "window.jQuery": "jquery",
-            }), // jQuery (npm i jquery)
+            }),
           ],
           module: {
             rules: [
@@ -83,20 +87,7 @@ function scripts() {
             ],
           },
         },
-        webpack,
-        (err, stats) => {
-          if (err) {
-            console.error("❌ Webpack Error:", err);
-            this.emit("end");
-          }
-          if (stats.hasErrors()) {
-            console.error(
-              "❌ Webpack Stats Errors:",
-              stats.toString({ colors: true })
-            );
-            this.emit("end");
-          }
-        }
+        webpack
       )
     )
     .on("error", function (err) {
@@ -104,14 +95,15 @@ function scripts() {
       this.emit("end");
     })
     .pipe(concat("app.min.js"))
-    .pipe(dest("app/js"))
+    .pipe(dest(`${appDir}/js`))
     .pipe(browserSync.stream());
 }
 
+/* ------------------ Styles ------------------ */
 function styles() {
   return src([
-    `app/styles/${preprocessor}/*.*`,
-    `!app/styles/${preprocessor}/_*.*`,
+    `${appDir}/styles/${preprocessor}/*.*`,
+    `!${appDir}/styles/${preprocessor}/_*.*`,
   ])
     .pipe(eval(`${preprocessor}glob`)())
     .pipe(
@@ -140,62 +132,82 @@ function styles() {
       ])
     )
     .pipe(concat("app.min.css"))
-    .pipe(dest("app/css"))
+    .pipe(dest(`${appDir}/css`))
     .pipe(browserSync.stream());
 }
 
+/* ------------------ Images ------------------ */
 async function images() {
   try {
-    const files = await imagemin([`app/images/src/**/*`], {
+    const srcDir = path.resolve(`${appDir}/images/src`);
+    const outputDir = path.resolve(`${appDir}/images`);
+
+    // 🧹 Очистка старых оптимизированных изображений, кроме src/
+    const subdirs = await fs.readdir(outputDir);
+    for (const dir of subdirs) {
+      const fullPath = path.join(outputDir, dir);
+      if (dir !== "src") {
+        await fs.remove(fullPath);
+      }
+    }
+
+    console.log("🧽 Old optimized images cleaned.");
+
+    // 📸 Оптимизация
+    const files = await imagemin([`${srcDir}/**/*.{jpg,jpeg,png,svg}`], {
       plugins: [
         imageminMozjpeg({ quality: 90 }),
         imageminPngquant({ quality: [0.6, 0.8] }),
         imageminSvgo(),
       ],
     });
+
     for (const v of files) {
-      const relativePath = path.relative("app/images/src", v.sourcePath);
-      const destPath = path.join("app/images/dist", relativePath);
-      fs.ensureDirSync(path.dirname(destPath));
-      fs.writeFileSync(destPath, v.data);
+      const relativePath = path.relative(srcDir, v.sourcePath);
+      const destPath = path.join(outputDir, relativePath);
+      await fs.outputFile(destPath, v.data);
     }
+
     console.log("✅ Images optimized successfully.");
   } catch (err) {
     console.error("❌ Image Minification Error:", err.message || err);
   }
 }
 
+/* ------------------ Build: Copy ------------------ */
 function buildcopy() {
   return src(
     [
-      "{app/js,app/css}/*.min.*",
-      "app/images/**/*.*",
-      "!app/images/src/**/*",
-      // 'app/fonts/**/*'
+      `{${appDir}/js,${appDir}/css}/*.min.*`,
+      `${appDir}/images/**/*.*`,
+      `!${appDir}/images/src/**/*`,
+      // `${appDir}/fonts/**/*`,
     ],
-    { base: "app/", encoding: false }
-  ).pipe(dest("dist"));
+    { base: `${appDir}/`, encoding: false }
+  ).pipe(dest(distDir));
 }
 
+/* ------------------ Build: HTML ------------------ */
 async function buildhtml() {
-  let includes = new ssi("app/", "dist/", "/**/*.html");
+  let includes = new ssi(appDir, distDir, "/**/*.html");
   includes.compile();
-  await deleteAsync("dist/parts", { force: true });
+  await deleteAsync(`${distDir}/parts`, { force: true });
 }
 
+/* ------------------ Clean ------------------ */
 async function cleandist() {
-  await deleteAsync("dist/**/*", { force: true });
+  await deleteAsync(`${distDir}/**/*`, { force: true });
 }
 
+/* ------------------ Deploy ------------------ */
 function deploy() {
-  return src("dist/").pipe(
+  return src(distDir).pipe(
     rsync({
-      root: "dist/",
-      hostname: "username@yousite.com",
-      destination: "yousite/public_html/",
-      clean: true, // Mirror copy with file deletion
-      // include: ['*.htaccess'], // Includes files to deploy
-      exclude: ["**/Thumbs.db", "**/*.DS_Store"], // Excludes files from deploy
+      root: distDir,
+      hostname: "username@yoursite.com",
+      destination: "yoursite/public_html/",
+      clean: true,
+      exclude: ["**/Thumbs.db", "**/*.DS_Store"],
       recursive: true,
       archive: true,
       silent: false,
@@ -204,23 +216,29 @@ function deploy() {
   );
 }
 
+/* ------------------ Watch ------------------ */
 function startwatch() {
-  watch([`app/styles/${preprocessor}/**/*`], { usePolling: true }, styles);
   watch(
-    ["app/js/**/*.js", "!app/js/**/*.min.js"],
+    [`${appDir}/styles/${preprocessor}/**/*`],
+    { usePolling: true },
+    styles
+  );
+  watch(
+    [`${appDir}/js/**/*.js`, `!${appDir}/js/**/*.min.js`],
     { usePolling: true },
     scripts
   );
-  watch(["app/images/src/**/*"], { usePolling: true }, images);
-  watch([`app/**/*.{${fileswatch}}`], { usePolling: true }).on(
+  watch([`${appDir}/images/src/**/*`], { usePolling: true }, images);
+  watch([`${appDir}/**/*.{${fileswatch}}`], { usePolling: true }).on(
     "change",
     browserSync.reload
   );
 }
 
+/* ------------------ Exports ------------------ */
 export { scripts, styles, images, deploy };
-export let assets = series(scripts, styles, images);
-export let build = series(
+export const assets = series(scripts, styles, images);
+export const build = series(
   cleandist,
   images,
   scripts,
@@ -228,7 +246,6 @@ export let build = series(
   buildcopy,
   buildhtml
 );
-
 export default series(
   scripts,
   styles,
