@@ -1,7 +1,7 @@
 .custom-select {
   position: relative;
 
-  &:has(.custom-select_options[style="display: block;"]) {
+  &:has(.custom-select_options[style="display:block;"]) {
     .custom-select_input {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
