@@ -53,8 +53,6 @@ $order-pulse-delay-step: 0.4s !default;
       }
 
       @media (max-width: $figma-tablet) {
-        grid-template-columns: 1fr;
-
         & {
           grid-column: 1 / -1 !important;
         }
@@ -116,14 +114,17 @@ $order-pulse-delay-step: 0.4s !default;
       height: 0.375rem;
       background-image: radial-gradient(
         circle,
-        rgba(255, 255, 255, 0.35) 25%,
+        rgba(255, 255, 255, 0.4) 25%,
         transparent 30%
       );
       background-size: 1.625rem 0.375rem;
       background-repeat: repeat-x;
       z-index: 0;
       animation: linePulse 2.5s ease-in-out infinite;
-      opacity: 0.4;
+      opacity: 0.6;
+      filter: brightness(110%);
+      backface-visibility: hidden;
+      transform: translateZ(0);
       will-change: opacity, filter;
     }
 
@@ -152,6 +153,8 @@ $order-pulse-delay-step: 0.4s !default;
       animation: pulse 2.5s ease-in-out infinite;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       will-change: transform, box-shadow;
+      backface-visibility: hidden;
+      transform: translateZ(0);
     }
 
     &:nth-child(1) .step_base {
@@ -200,8 +203,8 @@ $order-pulse-delay-step: 0.4s !default;
     box-shadow: 0 0 0 0 rgba($blue, 0.4);
   }
   50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px 5px rgba($blue, 0.25);
+    transform: scale(1.08);
+    box-shadow: 0 0 18px 6px rgba($blue, 0.35);
   }
 }
 
@@ -209,11 +212,11 @@ $order-pulse-delay-step: 0.4s !default;
   0%,
   100% {
     opacity: 0.3;
-    filter: brightness(100%);
+    filter: brightness(100%) blur(0px);
   }
   50% {
     opacity: 1;
-    filter: brightness(160%);
+    filter: brightness(180%) blur(0.5px);
   }
 }
 
@@ -224,9 +227,24 @@ $order-pulse-delay-step: 0.4s !default;
     gap: $space-md;
     margin-top: $space-xxl;
     margin-bottom: $space-xxl;
+    perspective: 1000px;
+  }
+
+  .step {
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   .step:not(:last-child)::after {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none;
+    transition: none;
   }
 }
