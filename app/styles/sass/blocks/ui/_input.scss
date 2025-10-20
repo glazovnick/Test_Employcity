@@ -48,7 +48,9 @@
   }
   .file-name {
     color: $white;
-    display: inline-flex;
-    margin-top: $space-xxs;
+
+    &:not(:empty) {
+      margin-top: $space-xxs;
+    }
   }
 }

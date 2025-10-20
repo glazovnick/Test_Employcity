@@ -222,8 +222,8 @@ $order-pulse-delay-step: 0.4s !default;
     flex-direction: column;
     align-items: center;
     gap: $space-md;
-    margin-top: $space-lg;
-    margin-bottom: $space-lg;
+    margin-top: $space-xxl;
+    margin-bottom: $space-xxl;
   }
 
   .step:not(:last-child)::after {
